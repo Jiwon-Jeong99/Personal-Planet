@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>result</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <img src = "#" onclick = "download()" class="resultImage">
+</body>
+<script>
+  const filename = window.location.search.slice(1);
+  document.getElementsByTagName("img")[0].src = filename;
+
+  function download(){
+    let a = document.createElement('a');
+    a.href = document.getElementsByTagName("img")[0].src;
+    a.download = document.getElementsByTagName("img")[0].src;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+</script>
+</html>

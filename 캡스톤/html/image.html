@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="POST.js"></script>
+</head>
+<body>
+    <div class="inner-second">
+        <img onclick="image_file.click()" src="upload.png" id="image">
+        <img onclick="imageUpload()" class="image-upload-btn" src="2p.png">
+        <img src="2ptext.png" class="text-two">
+        <input type="file" id="image-file" style="display: none;">
+        <div class="loader" id = "layer" style="display: none;"></div>
+    </div>
+</body>
+<script>
+    let image_file = document.querySelector("#image-file");
+    let image = document.querySelector("#image");
+    image_file.onchange = function(event){
+        if ( typeof event.target.files[0] === "undefined" )
+            return;
+        var URL = window.URL || window.webkitURL;
+        if ( image.src.match(/^\w+:/g) == "blob:" )
+            URL.revokeObjectURL(image.src) 
+        image.src = URL.createObjectURL(event.target.files[0]);
+    }
+    let imageUpload = function(){ 
+        if(image_file.files.length === 0){
+            alert("이미지 업로드 후에 클릭해주세요.");
+            return;
+        }
+
+        var x = document.getElementById("layer");
+        x.style.display = "block"
+        
+        let data = new FormData(); 
+        data.append("image", image_file.files[0]);
+        POST("upload", data, function(resp){
+            console.log(resp.status + ':' + resp.data);
+            console.log(resp.data.output);
+            window.location = "select.html?" + resp.data.output + "|" + resp.data.ext;
+        });
+    }
+</script>
+</html>

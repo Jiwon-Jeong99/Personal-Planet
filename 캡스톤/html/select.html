@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>select</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="POST.js"></script>
+</head>
+<body>
+    <div class="inner-third">
+    <div class="button1">
+    <button onclick="results(1, this)" type = "button">
+        <img src = "#" height = "180" width = "180"/>
+    </button>
+    <button onclick="results(2, this)" type = "button">
+        <img src = "#" height = "180" width = "180"/>
+    </button>
+    </div>
+    <div class="button2">
+    <button onclick="results(3, this)" type = "button">
+        <img src = "#" height = "180" width = "180"/>
+    </button>
+    <button onclick="results(4, this)" type = "button">
+        <img src = "#" height = "180" width = "180"/>
+    </button>
+    </div>
+    </div>
+</body>
+<script>
+    const filename = window.location.search.slice(1).split("|")[0];
+    const ext = window.location.search.slice(1).split("|")[1];
+    const season = ["warm_spring", "cool_summer", "warm_autumn", "cool_winter"];
+    function realtime(){
+        imgs = document.getElementsByTagName("img");
+        console.log(imgs);
+        for (let index = 0; index < imgs.length; index++) {
+            const img = imgs[index];
+            const cseason = season[index];
+            img.src = `../result/${filename}_${cseason}${ext}`;
+        }
+    }
+    let results = function(number, obj){ 
+        let data = new FormData();
+        let fname = obj.getElementsByTagName("img")[0].getAttribute("src").split("/").reverse()[0];
+        data.append("filename", "result/" + fname);
+        data.append("number", number);
+        POST("select", data, function(resp){
+            console.log(resp.status + ':' + resp.data);
+            console.log(resp.data.output);
+            window.location = `result.html?${resp.data.output}`;
+        });
+    }     
+    realtime();
+
+</script>
+</html>
